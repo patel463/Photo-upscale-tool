@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Free Online Photo Upscaler - Enhance and enlarge images instantly in your browser." />
+  <meta name="keywords" content="photo upscaler, free image enhancer, online image upscaling, AI image upscale" />
+  <meta name="author" content="Your Name" />
+  <title>Free Photo Upscaler - AI Image Enhancer</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100 text-gray-800">
+  <header class="bg-blue-600 p-4 text-white text-center">
+    <h1 class="text-2xl font-bold">Free AI Photo Upscaler</h1>
+    <p>Upscale your images instantly in your browser - 100% Free</p>
+  </header>
+
+  <main class="container mx-auto p-4">
+    <section class="bg-white rounded shadow p-6">
+      <h2 class="text-xl font-semibold mb-4">Upload and Upscale</h2>
+      <input type="file" id="upload" accept="image/*" class="mb-4 p-2 border" />
+      <div id="progress" class="hidden mb-4">Processing...</div>
+      <canvas id="canvas" class="w-full border"></canvas>
+      <a id="download" href="#" download="upscaled.png" class="hidden mt-4 inline-block bg-blue-600 text-white py-2 px-4 rounded">Download Upscaled Image</a>
+    </section>
+  </main>
+
+  <footer class="text-center p-4 text-sm text-gray-600">
+    <p>&copy; 2025 Free AI Photo Upscaler</p>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/upscaler@1.0.1/dist/browser/umd/upscaler.min.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
