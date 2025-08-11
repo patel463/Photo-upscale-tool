@@ -1,74 +1,53 @@
 <!DOCTYPE html>
 <html lang="hi">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <meta name="description" content="मुफ़्त Photo Upscaler — ब्राउज़र में तुरंत इमेज बड़ा करें" />
-  <title>मुफ़्त Photo Upscaler</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="मुफ़्त ऑनलाइन फ़ोटो अपस्केलर - अपने फ़ोटो की क्वालिटी बढ़ाएं और उन्हें तुरंत बड़ा करें।" />
+  <meta name="keywords" content="फोटो अपस्केलर, मुफ्त इमेज एन्हांसर, AI इमेज अपस्केल, ऑनलाइन इमेज बड़ा करें" />
+  <meta name="author" content="Your Name" />
+  <title>मुफ़्त AI फोटो अपस्केलर</title>
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-  <style>
-    /* छोटा सी सीएसएस सिर्फ slider के लिए */
-    .before-after { position: relative; overflow: hidden; }
-    .before-after img { display:block; width:100%; height:auto; }
-    .before-after .after-wrap { position:absolute; top:0; left:0; height:100%; overflow:hidden; }
-  </style>
 </head>
-<body class="bg-gray-100 text-gray-900">
-  <header class="bg-blue-600 text-white p-5 text-center">
-    <h1 class="text-2xl font-bold">मुफ़्त Photo Upscaler</h1>
-    <p class="text-sm">ब्राउज़र में तुरंत अपस्केल — कोई सर्वर नहीं</p>
+<body class="bg-gray-100 text-gray-800">
+
+  <header class="bg-blue-600 p-4 text-white text-center">
+    <h1 class="text-2xl font-bold">मुफ़्त AI फोटो अपस्केलर</h1>
+    <p>अपनी तस्वीर को तुरंत बड़ा और बेहतर बनाएं - 100% फ्री</p>
   </header>
 
-  <main class="max-w-3xl mx-auto p-4">
-    <section class="bg-white rounded-lg shadow p-6 mb-6">
-      <h2 class="text-lg font-semibold mb-3">अपलोड और अपस्केल</h2>
+  <!-- 📢 विज्ञापन स्लॉट 1 (Header के नीचे) -->
+  <div class="container mx-auto my-4 text-center">
+    <!-- यहां अपना AdSense कोड डालें -->
+    <div class="bg-gray-300 text-gray-700 p-4 rounded">
+      📢 यहां आपका बैनर विज्ञापन आएगा
+    </div>
+  </div>
 
-      <label class="block mb-2 font-medium">Image चुनें</label>
-      <input id="fileInput" type="file" accept="image/*" class="mb-3" />
+  <main class="container mx-auto p-4">
+    <section class="bg-white rounded shadow p-6">
+      <h2 class="text-xl font-semibold mb-4">अपलोड करें और अपस्केल करें</h2>
+      <input type="file" id="upload" accept="image/*" class="mb-4 p-2 border" />
 
-      <div class="flex gap-3 items-center mb-3">
-        <label class="text-sm">Scale</label>
-        <select id="scaleSel" class="p-2 border rounded">
-          <option value="1.5">1.5×</option>
-          <option value="2" selected>2×</option>
-          <option value="3">3×</option>
-        </select>
-
-        <label class="text-sm">Quality</label>
-        <select id="qualitySel" class="p-2 border rounded">
-          <option value="low">Fast</option>
-          <option value="high" selected>High (smooth)</option>
-          <option value="pixel">Pixelated (nearest)</option>
-        </select>
-
-        <button id="upBtn" class="ml-auto px-4 py-2 bg-indigo-600 text-white rounded">Upscale</button>
+      <!-- 📢 विज्ञापन स्लॉट 2 (Content के बीच) -->
+      <div class="my-4 text-center">
+        <!-- यहां अपना AdSense कोड डालें -->
+        <div class="bg-gray-300 text-gray-700 p-4 rounded">
+          📢 यहां आपका Responsive विज्ञापन आएगा
+        </div>
       </div>
 
-      <div id="status" class="text-sm text-gray-600 mb-3">कृपया एक image चुनें और Upscale दबाएँ।</div>
-
-      <div id="previewArea" class="border rounded p-3 min-h-[200px] bg-gray-50">
-        <!-- Before / After slider appears here -->
-      </div>
-
-      <div class="mt-4 flex gap-2">
-        <a id="downloadLink" class="hidden px-4 py-2 bg-green-600 text-white rounded" download="upscaled.png">डाउनलोड करें</a>
-        <button id="resetBtn" class="px-4 py-2 border rounded">रीसेट</button>
-      </div>
-    </section>
-
-    <section class="text-sm text-gray-700">
-      <h3 class="font-medium">नोट</h3>
-      <ul class="list-disc pl-5">
-        <li>यह वर्ज़न ब्राउज़र में canvas interpolation का उपयोग करता है — तेज़ और भरोसेमंद।</li>
-        <li>अगर आप चाहें तो मैं बाद में UpscalerJS / TF.js का AI मॉडल जोड़कर और बेहतर क्वालिटी दे दूँगा।</li>
-      </ul>
+      <div id="progress" class="hidden mb-4 text-blue-600 font-semibold">प्रोसेस हो रहा है...</div>
+      <canvas id="canvas" class="w-full border"></canvas>
+      <a id="download" href="#" download="upscaled.png" class="hidden mt-4 inline-block bg-blue-600 text-white py-2 px-4 rounded">डाउनलोड करें</a>
     </section>
   </main>
 
-  <footer class="text-center text-gray-500 p-6">
-    © 2025 आपका नाम
+  <footer class="text-center p-4 text-sm text-gray-600">
+    <p>&copy; 2025 मुफ़्त AI फोटो अपस्केलर</p>
   </footer>
 
+  <script src="https://cdn.jsdelivr.net/npm/upscaler@1.0.1/dist/browser/umd/upscaler.min.js"></script>
   <script src="script.js"></script>
 </body>
 </html>
