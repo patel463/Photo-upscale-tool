@@ -1,77 +1,18 @@
-<!doctype html>
-<html lang="hi">
+<!DOCTYPE html>
+<html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>मुफ़्त उन्नत AI फ़ोटो अपस्केलर | Real‑ESRGAN (TensorFlow.js)</title>
-  <meta name="description" content="मुफ़्त उन्नत AI फ़ोटो अपस्केलर: Real‑ESRGAN (TensorFlow.js) के साथ 2x‑4x तक ब्राउज़र में ही इमेज क्वालिटी और रेज़ॉल्यूशन बढ़ाएँ। विज्ञापन‑समर्थित, तेज़ और SEO‑फ्रेंडली।" />
-  <meta name="keywords" content="मुफ़्त फोटो अपस्केलर, एआई इमेज बड़ा करें, ऑनलाइन फोटो एन्हांसर, हिंदी इमेज अपस्केल, रियल ईएसआरगैन, टेंसरफ्लो जेएस अपस्केल, मोबाइल पर इमेज सुधार, फोटो क्वालिटी बढ़ाएं, इमेज शार्पनिंग ऑनलाइन, मुफ्त एआई टूल, इमेज रिज़ॉल्यूशन बढ़ाएं, वेब आधारित अपस्केलर, ब्राउज़र अपस्केलिंग, इमेज क्लैरिटी बढ़ाएं, HD फोटो बनाएं, हिंदी एआई टूल, फोटो सुधार फ्री, इमेज अपस्केल 2x 4x, तुरंत इमेज बड़ा करें, फोटो एन्हांस ऑनलाइन, free photo upscaler, AI image enhancer, online image upscaling, Real-ESRGAN tfjs, browser upscaler, TensorFlow.js super resolution, increase image resolution, image clarity booster, HD upscaler online, mobile friendly upscaler, client side AI, no signup upscaler, 2x 4x image upscale, open source upscaler, SEO friendly tool, fast image upscaling, image quality enhancer, web photo enlarger, responsive upscaler, privacy safe upscaler" />
-  <meta name="author" content="Your Name" />
-  <meta name="robots" content="index,follow,max-image-preview:large" />
-  <meta property="og:title" content="Free Advanced AI Photo Upscaler (Real‑ESRGAN, TF.js)" />
-  <meta property="og:description" content="Upscale images 2x‑4x in your browser. Free, no signup, SEO‑ready." />
-  <meta property="og:type" content="website" />
-  <meta property="og:url" content="https://example.com/" />
-  <meta property="og:image" content="https://example.com/og-image.png" />
-  <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="Free AI Photo Upscaler (Real‑ESRGAN)" />
-  <meta name="twitter:description" content="Upscale images 2x‑4x in your browser. Free, no signup." />
-  <link rel="alternate" href="https://example.com/" hreflang="x-default">
-  <link rel="alternate" href="https://example.com/" hreflang="hi">
-  <link rel="canonical" href="https://example.com/">
-  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-  <script type="application/ld+json">
-  {"@context": "https://schema.org", "@type": "SoftwareApplication", "name": "Free AI Photo Upscaler", "applicationCategory": "MultimediaApplication", "operatingSystem": "Web", "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"}, "description": "Browser-based Real‑ESRGAN (TF.js) image upscaler 2x‑4x. Free and privacy-friendly.", "url": "https://example.com/"}
-  </script>
-  <style>.container-narrow{max-width:960px}</style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Image Upscaler - Offline</title>
+<meta name="description" content="AI-powered offline image upscaler using Real-ESRGAN 4x model with TensorFlow.js">
+<meta name="keywords" content="AI image upscaler, offline photo enhancer, free image upscaler, image quality improve, फोटो क्वालिटी सुधारें, इमेज अपस्केलर, HD फोटो कन्वर्ट, फ्री ऑफलाइन अपस्केलर">
+<link rel="stylesheet" href="assets/css/style.css">
 </head>
-<body class="bg-gray-100 text-gray-900">
-  <header class="bg-blue-600 text-white">
-    <div class="container mx-auto container-narrow p-6 text-center">
-      <h1 class="text-3xl font-extrabold">मुफ़्त AI फ़ोटो अपस्केलर</h1>
-      <p class="opacity-90">Real‑ESRGAN (TensorFlow.js) — ब्राउज़र में 2×‑4× तक इमेज क्वालिटी बढ़ाएँ।</p>
-    </div>
-  </header>
-  <div class="container mx-auto container-narrow my-4">
-    <div class="bg-gray-200 text-center p-4 rounded">📢 यहां आपका बैनर विज्ञापन आएगा</div>
-  </div>
-  <main class="container mx-auto container-narrow p-4">
-    <section class="bg-white rounded shadow p-5">
-      <h2 class="text-xl font-semibold mb-3">Upload करें और Upscale करें</h2>
-      <div class="flex flex-col md:flex-row gap-3 mb-4">
-        <input id="upload" type="file" accept="image/*" class="p-2 border rounded" aria-label="Upload image">
-        <select id="scaleSel" class="p-2 border rounded" aria-label="Select scale">
-          <option value="2" selected>2× (recommended)</option>
-          <option value="3">3×</option>
-          <option value="4">4×</option>
-        </select>
-        <button id="loadModelBtn" class="px-4 py-2 bg-yellow-500 rounded">मॉडल लोड करें</button>
-        <button id="upBtn" class="px-4 py-2 bg-blue-600 text-white rounded">AI Upscale</button>
-      </div>
-      <div class="my-4">
-        <div class="bg-gray-200 text-center p-3 rounded">📢 यहां आपका Responsive विज्ञापन आएगा</div>
-      </div>
-      <div id="status" class="text-sm text-gray-600 mb-2">मॉडल: लोड नहीं हुआ</div>
-      <div id="progress" class="hidden mb-2 text-blue-600 font-semibold">Processing…</div>
-      <figure>
-        <canvas id="canvas" class="w-full border rounded" aria-label="Upscaled image result"></canvas>
-        <figcaption id="figcap" class="text-xs text-gray-500 mt-1">अपलोड करें और Upscale करें।</figcaption>
-      </figure>
-      <div class="mt-4 flex items-center gap-3">
-        <a id="download" class="hidden px-4 py-2 bg-green-600 text-white rounded" download="upscaled.png">डाउनलोड करें</a>
-        <button id="resetBtn" class="px-3 py-2 border rounded">रीसेट</button>
-      </div>
-    </section>
-    <section class="mt-6 text-sm text-gray-700">
-      <h3 class="font-semibold mb-1">SEO टिप्स</h3>
-      <ul class="list-disc pl-5">
-        <li>फ़ोटो के लिए alt-text जोड़ें।</li>
-        <li>Page title और description यूनिक रखें।</li>
-        <li>लोडिंग स्पीड तेज़ रखें (lazy‑load, CDN).</li>
-      </ul>
-    </section>
-  </main>
-  <footer class="text-center p-6 text-gray-500">© 2025 Free AI Photo Upscaler</footer>
-  <script src="script.js"></script>
+<body>
+    <h1>AI Image Upscaler - Offline Version</h1>
+    <input type="file" id="fileInput" accept="image/*">
+    <canvas id="outputCanvas"></canvas>
+    <script src="assets/js/tf.min.js"></script>
+    <script src="assets/js/upscaler.js"></script>
 </body>
 </html>
