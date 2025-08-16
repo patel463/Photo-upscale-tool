@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" class="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Disclaimer - AI Photo Upscaler</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="logo">AI Photo Upscaler</div>
+            <div class="header-ads">Advertisement</div>
+            <div class="theme-toggle" onclick="toggleTheme()">
+                <span class="light-icon">☀️</span>
+                <span class="dark-icon">🌙</span>
+            </div>
+        </div>
+    </header>
+
+    <div class="main-container">
+        <main class="disclaimer">
+            <h1>Disclaimer</h1>
+            
+            <section>
+                <h2>1. No Warranty</h2>
+                <p>AI Photo Upscaler is provided "as is" without any warranties of any kind, express or implied. We do not guarantee that the results will meet your expectations or be suitable for any particular purpose.</p>
+            </section>
+            
+            <section>
+                <h2>2. Image Processing</h2>
+                <p>While our AI technology can significantly improve image quality, results may vary depending on the original image quality and content. The upscaling process cannot recover details that were never present in the original image.</p>
+            </section>
+            
+            <section>
+                <h2>3. Copyright</h2>
+                <p>You must own the copyright or have permission to process any images you upload. We are not responsible for any copyright violations resulting from your use of this service.</p>
+            </section>
+            
+            <section>
+                <h2>4. Limitations</h2>
+                <p>Very large images or high upscale factors may take significant time to process or may not work on older devices. Performance depends on your device capabilities.</p>
+            </section>
+            
+            <section>
+                <h2>5. Changes to Service</h2>
+                <p>We reserve the right to modify or discontinue the service at any time without notice.</p>
+            </section>
+            
+            <p class="effective-date">Effective Date: January 1, 2023</p>
+        </main>
+    </div>
+
+    <footer>
+        <div class="container">
+            <div class="footer-ads">Advertisement</div>
+            <div class="footer-links">
+                <a href="index.html">Home</a>
+                <a href="privacy-policy.html">Privacy Policy</a>
+                <span>© 2023 AI Photo Upscaler</span>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Theme toggle function
+        function toggleTheme() {
+            document.documentElement.classList.toggle('dark');
+            localStorage.setItem('theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light');
+        }
+
+        // Check for saved theme preference
+        if (localStorage.getItem('theme') === 'dark') {
+            document.documentElement.classList.add('dark');
+        }
+    </script>
+</body>
+</html>
