@@ -1,18 +1,142 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" dir="ltr" class="light">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AI Image Upscaler - Offline</title>
-<meta name="description" content="AI-powered offline image upscaler using Real-ESRGAN 4x model with TensorFlow.js">
-<meta name="keywords" content="AI image upscaler, offline photo enhancer, free image upscaler, image quality improve, फोटो क्वालिटी सुधारें, इमेज अपस्केलर, HD फोटो कन्वर्ट, फ्री ऑफलाइन अपस्केलर">
-<link rel="stylesheet" href="assets/css/style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Free AI-powered photo upscaler. Enhance image quality, increase resolution offline. फोटो अपस्केल करें, इमेज क्वालिटी सुधारें, ऑफलाइन काम करता है">
+    <meta name="keywords" content="फोटो अपस्केल, इमेज क्वालिटी सुधार, एचडी फोटो, इमेज एन्हांस, फोटो बढ़ाओ, फोटो स्पष्ट करो, HD Photo, Image Upscale, AI Image Enhance, Super Resolution, Photo Quality Booster, Image Enlargement, Picture HD, फोटो रेज़ोल्यूशन, Free Photo Upscale, Online Photo Tool, Offline Photo Tool, AI Image Sharpen, Modern Photo Editor, Best Image Upscaler">
+    <meta name="author" content="AI Photo Upscaler">
+    
+    <!-- Schema.org markup -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "AI Photo Upscaler",
+      "operatingSystem": "Web",
+      "applicationCategory": "ImageEditor",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      }
+    }
+    </script>
+    
+    <!-- OG Tags -->
+    <meta property="og:title" content="AI Photo Upscaler - Free Online Image Enhancer">
+    <meta property="og:description" content="Enhance your photos with AI-powered upscaling. Works offline too!">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://example.com">
+    <meta property="og:image" content="https://example.com/assets/demo-before.jpg">
+    
+    <title>AI Photo Upscaler - Free Online Image Enhancer | फोटो अपस्केल टूल</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" href="assets/icons/icon-192x192.png">
 </head>
 <body>
-    <h1>AI Image Upscaler - Offline Version</h1>
-    <input type="file" id="fileInput" accept="image/*">
-    <canvas id="outputCanvas"></canvas>
-    <script src="assets/js/tf.min.js"></script>
-    <script src="assets/js/upscaler.js"></script>
+    <header>
+        <div class="container">
+            <div class="logo">AI Photo Upscaler</div>
+            <div class="header-ads">Advertisement</div>
+            <div class="theme-toggle" onclick="toggleTheme()">
+                <span class="light-icon">☀️</span>
+                <span class="dark-icon">🌙</span>
+            </div>
+        </div>
+    </header>
+
+    <div class="main-container">
+        <aside class="sidebar">
+            <div class="sidebar-ads">Advertisement</div>
+            <div class="how-it-works">
+                <h3>How It Works / यह कैसे काम करता है</h3>
+                <p>1. Upload your photo (अपनी फोटो अपलोड करें)</p>
+                <p>2. Select upscale level (अपस्केल स्तर चुनें)</p>
+                <p>3. Process with AI (AI से प्रोसेस करें)</p>
+                <p>4. Download HD result (HD रिजल्ट डाउनलोड करें)</p>
+            </div>
+        </aside>
+
+        <main>
+            <div class="upload-container">
+                <h1>AI Photo Upscaler</h1>
+                <p class="subtitle">Enhance your photos with AI-powered super resolution. Works offline!</p>
+                <p class="subtitle-hindi">AI द्वारा अपनी फोटो की क्वालिटी सुधारें। ऑफलाइन भी काम करता है!</p>
+                
+                <div class="upload-box" id="dropArea">
+                    <div class="upload-icon">📁</div>
+                    <p>Drag & drop your photo here or</p>
+                    <input type="file" id="fileInput" accept="image/*">
+                    <label for="fileInput" class="upload-btn">Select Photo</label>
+                    <p class="formats">Supports: JPG, PNG (Max 10MB)</p>
+                </div>
+                
+                <div class="options">
+                    <div class="option-group">
+                        <label for="upscaleLevel">Upscale Level:</label>
+                        <select id="upscaleLevel">
+                            <option value="2">2x</option>
+                            <option value="4" selected>4x</option>
+                            <option value="8">8x</option>
+                        </select>
+                    </div>
+                    
+                    <div class="option-group">
+                        <label for="modelSelect">AI Model:</label>
+                        <select id="modelSelect">
+                            <option value="realesrgan">Real-ESRGAN (General)</option>
+                            <option value="waifu2x">Waifu2x (Anime/Art)</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <button id="processBtn" class="process-btn" disabled>Upscale Photo</button>
+            </div>
+            
+            <div class="result-container hidden">
+                <h2>Result</h2>
+                <div class="comparison-container">
+                    <div class="comparison">
+                        <img id="beforeImage" src="" alt="Original Image">
+                        <img id="afterImage" src="" alt="Upscaled Image">
+                        <div class="comparison-slider">
+                            <div class="slider-line"></div>
+                            <div class="slider-button" draggable="true">↔</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="result-actions">
+                    <button id="downloadBtn" class="download-btn">Download HD Image</button>
+                    <button id="newPhotoBtn" class="new-photo-btn">Process New Photo</button>
+                </div>
+            </div>
+            
+            <div class="loading-container hidden">
+                <img src="assets/loading.gif" alt="Processing...">
+                <p>Enhancing your photo with AI...</p>
+                <p class="hindi">AI द्वारा आपकी फोटो को बेहतर बनाया जा रहा है...</p>
+                <p class="progress-text">Initializing AI model...</p>
+            </div>
+        </main>
+    </div>
+
+    <footer>
+        <div class="container">
+            <div class="footer-ads">Advertisement</div>
+            <div class="footer-links">
+                <a href="privacy-policy.html">Privacy Policy</a>
+                <a href="disclaimer.html">Disclaimer</a>
+                <span>© 2023 AI Photo Upscaler</span>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+    <!-- Load WebAssembly AI models -->
+    <script src="assets/models/realesrgan.js"></script>
+    <script src="assets/models/waifu2x.js"></script>
 </body>
 </html>
