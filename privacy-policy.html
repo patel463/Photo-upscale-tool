@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" class="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Privacy Policy - AI Photo Upscaler</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="logo">AI Photo Upscaler</div>
+            <div class="header-ads">Advertisement</div>
+            <div class="theme-toggle" onclick="toggleTheme()">
+                <span class="light-icon">☀️</span>
+                <span class="dark-icon">🌙</span>
+            </div>
+        </div>
+    </header>
+
+    <div class="main-container">
+        <main class="privacy-policy">
+            <h1>Privacy Policy</h1>
+            
+            <section>
+                <h2>1. Information We Collect</h2>
+                <p>Our AI Photo Upscaler processes your images entirely in your browser. We do not upload, store, or collect any of your photos on our servers. All image processing happens locally on your device.</p>
+            </section>
+            
+            <section>
+                <h2>2. Cookies and Analytics</h2>
+                <p>We may use basic cookies to remember your preferences (like dark/light mode) and anonymous analytics to understand how people use our app. This information cannot be used to identify you personally.</p>
+            </section>
+            
+            <section>
+                <h2>3. Third-Party Services</h2>
+                <p>Our app displays advertisements from third-party ad networks. These services may collect information about your visits to our website to provide relevant ads.</p>
+            </section>
+            
+            <section>
+                <h2>4. Changes to This Policy</h2>
+                <p>We may update this Privacy Policy from time to time. We will notify you of any changes by posting the new Privacy Policy on this page.</p>
+            </section>
+            
+            <section>
+                <h2>5. Contact Us</h2>
+                <p>If you have any questions about this Privacy Policy, please contact us.</p>
+            </section>
+            
+            <p class="effective-date">Effective Date: January 1, 2023</p>
+        </main>
+    </div>
+
+    <footer>
+        <div class="container">
+            <div class="footer-ads">Advertisement</div>
+            <div class="footer-links">
+                <a href="index.html">Home</a>
+                <a href="disclaimer.html">Disclaimer</a>
+                <span>© 2023 AI Photo Upscaler</span>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Theme toggle function
+        function toggleTheme() {
+            document.documentElement.classList.toggle('dark');
+            localStorage.setItem('theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light');
+        }
+
+        // Check for saved theme preference
+        if (localStorage.getItem('theme') === 'dark') {
+            document.documentElement.classList.add('dark');
+        }
+    </script>
+</body>
+</html>
