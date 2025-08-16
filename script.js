@@ -1,222 +1,294 @@
-// script.js - Upscaler.js आधारित browser upscaler
-// आवश्यक: index.html मेंUpscaler library CDN लोड होनी चाहिए:
-// <script src="https://cdn.jsdelivr.net/npm/upscaler@1.0.1/dist/browser/umd/upscaler.min.js"></script>
+// DOM Elements
+const fileInput = document.getElementById('fileInput');
+const dropArea = document.getElementById('dropArea');
+const processBtn = document.getElementById('processBtn');
+const upscaleLevel = document.getElementById('upscaleLevel');
+const modelSelect = document.getElementById('modelSelect');
+const beforeImage = document.getElementById('beforeImage');
+const afterImage = document.getElementById('afterImage');
+const downloadBtn = document.getElementById('downloadBtn');
+const newPhotoBtn = document.getElementById('newPhotoBtn');
+const uploadContainer = document.querySelector('.upload-container');
+const resultContainer = document.querySelector('.result-container');
+const loadingContainer = document.querySelector('.loading-container');
+const progressText = document.querySelector('.progress-text');
 
-const fileInput = document.getElementById('upload');
-const progressEl = document.getElementById('progress');
-const canvasEl = document.getElementById('canvas');
-const downloadLink = document.getElementById('download');
-const statusEl = document.getElementById('status'); // optional status area
-const scaleSel = document.getElementById('scaleSel') || { value: 2 };
-const qualitySel = document.getElementById('qualitySel') || { value: 'high' };
+// Variables
+let originalImage = null;
+let upscaledImage = null;
+let currentModel = null;
 
-let upscalerInstance = null;
-let modelLoaded = false;
+// Initialize the app
+function init() {
+    setupEventListeners();
+    registerServiceWorker();
+}
 
-// Lazy-load Upscaler instance (tab me jab zarurat ho tab hi load kare)
-async function ensureUpscaler() {
-  if (modelLoaded && upscalerInstance) return;
-  try {
-    statusText('मॉडल लोड हो रहा है — पहली बार थोड़ा समय लगेगा...');
-    // dynamic import - Upscaler global is available by CDN; but we prefer constructor from global
-    // if Upscaler global is not found, try dynamic import (fallback)
-    if (typeof Upscaler !== 'undefined') {
-      upscalerInstance = new Upscaler({ /* options: tileSize, tileOverlap, model, etc. */ });
-    } else {
-      // fallback dynamic import if CDN didn't expose global
-      const mod = await import('https://cdn.jsdelivr.net/npm/upscaler@1.0.1/dist/browser/umd/upscaler.min.js');
-      // Some bundlers won't allow import from URL; typically CDN global is present.
-      upscalerInstance = new mod.default ? new mod.default() : new Upscaler();
+// Set up event listeners
+function setupEventListeners() {
+    // File input change
+    fileInput.addEventListener('change', handleFileSelect);
+    
+    // Drag and drop events
+    dropArea.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        dropArea.classList.add('drag-over');
+    });
+    
+    dropArea.addEventListener('dragleave', () => {
+        dropArea.classList.remove('drag-over');
+    });
+    
+    dropArea.addEventListener('drop', (e) => {
+        e.preventDefault();
+        dropArea.classList.remove('drag-over');
+        
+        if (e.dataTransfer.files.length) {
+            fileInput.files = e.dataTransfer.files;
+            handleFileSelect({ target: fileInput });
+        }
+    });
+    
+    // Process button click
+    processBtn.addEventListener('click', processImage);
+    
+    // Download button click
+    downloadBtn.addEventListener('click', downloadImage);
+    
+    // New photo button click
+    newPhotoBtn.addEventListener('click', resetApp);
+    
+    // Comparison slider
+    setupComparisonSlider();
+}
+
+// Handle file selection
+function handleFileSelect(e) {
+    const file = e.target.files[0];
+    if (!file) return;
+    
+    if (!file.type.match('image.*')) {
+        alert('Please select an image file (JPEG, PNG)');
+        return;
     }
-    modelLoaded = true;
-    statusText('मॉडल तैयार है।');
-  } catch (err) {
-    console.error('Upscaler load error', err);
-    statusText('मॉडल लोड नहीं हुआ — ब्राउज़र पर निर्भरता। फ़ॉलबैक चालू करें।');
-    modelLoaded = false;
-    upscalerInstance = null;
-  }
-}
-
-// File select handler
-fileInput?.addEventListener('change', (e) => {
-  const file = e.target.files && e.target.files[0];
-  if (!file) return;
-  loadImageAndShow(file);
-});
-
-// Load image and show on canvas (original)
-function loadImageAndShow(file) {
-  const img = new Image();
-  img.crossOrigin = 'anonymous';
-  const url = URL.createObjectURL(file);
-  img.src = url;
-
-  img.onload = () => {
-    // show original in canvas (fit to element width)
-    drawImageOnCanvas(img, img.naturalWidth, img.naturalHeight);
-    statusText(`Image loaded: ${img.naturalWidth}×${img.naturalHeight}. अब Upscale करें।`);
-    // cleanup URL later if needed
-    // store original image element for processing
-    window.__UP_ORIG_IMG = img;
-    downloadLink.classList.add('hidden');
-  };
-
-  img.onerror = () => {
-    statusText('Image load failed। कृपया अलग फ़ाइल try करें।');
-    URL.revokeObjectURL(url);
-  };
-}
-
-// Draw image on canvas, optionally scale
-function drawImageOnCanvas(img, w, h) {
-  const canvas = canvasEl;
-  canvas.width = w;
-  canvas.height = h;
-  const ctx = canvas.getContext('2d');
-  // clear
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-  ctx.drawImage(img, 0, 0, w, h);
-}
-
-// Run upscale process (call from button)
-async function runUpscale() {
-  const img = window.__UP_ORIG_IMG;
-  if (!img) {
-    alert('कृपया पहले image चुनें।');
-    return;
-  }
-
-  // chosen options
-  const scale = parseFloat(scaleSel?.value) || 2;
-  const quality = qualitySel?.value || 'high';
-
-  // ensure upscaler loaded
-  await ensureUpscaler();
-
-  statusText('Processing... कृपया प्रतीक्षा करें।');
-  showProgress(true);
-
-  try {
-    // If upscaler is available, use it. Otherwise fallback to canvas scaling.
-    if (upscalerInstance && modelLoaded) {
-      // upscaler.enhance may accept image element and options like scale
-      // NOTE: API depends on the upscaler version; this example assumes enhance/enhance or upscale method
-      // Using enhance or upscale depending on library
-      let outCanvas;
-      if (typeof upscalerInstance.enhance === 'function') {
-        outCanvas = await upscalerInstance.enhance(img, { scale: scale });
-      } else if (typeof upscalerInstance.upscale === 'function') {
-        outCanvas = await upscalerInstance.upscale(img, { scale: scale });
-      } else {
-        throw new Error('Upscaler API not supported in this build.');
-      }
-
-      // If returned canvas-like element, draw directly
-      if (outCanvas && outCanvas instanceof HTMLCanvasElement) {
-        // copy result canvas into visible canvasEl
-        canvasEl.width = outCanvas.width;
-        canvasEl.height = outCanvas.height;
-        const ctx = canvasEl.getContext('2d');
-        ctx.clearRect(0, 0, canvasEl.width, canvasEl.height);
-        ctx.drawImage(outCanvas, 0, 0);
-      } else if (outCanvas && outCanvas instanceof ImageBitmap) {
-        canvasEl.width = outCanvas.width;
-        canvasEl.height = outCanvas.height;
-        const ctx = canvasEl.getContext('2d');
-        ctx.drawImage(outCanvas, 0, 0);
-      } else if (outCanvas && outCanvas.src) {
-        // if library returned an image-like object with src
-        const tmpImg = new Image();
-        tmpImg.src = outCanvas.src;
-        await tmpImg.decode();
-        canvasEl.width = tmpImg.naturalWidth;
-        canvasEl.height = tmpImg.naturalHeight;
-        const ctx = canvasEl.getContext('2d');
-        ctx.drawImage(tmpImg, 0, 0);
-      } else {
-        throw new Error('Upscaler returned unsupported result.');
-      }
-    } else {
-      // Fallback: simple canvas scaling with imageSmoothingQuality
-      await fallbackCanvasUpscale(img, scale, quality);
+    
+    if (file.size > 10 * 1024 * 1024) {
+        alert('File size should be less than 10MB');
+        return;
     }
-
-    // Prepare download link
-    const dataUrl = canvasEl.toDataURL('image/png');
-    downloadLink.href = dataUrl;
-    downloadLink.classList.remove('hidden');
-    statusText('Upscale पूरा हुआ — डाउनलोड बटन देखें।');
-  } catch (err) {
-    console.error('Upscale error:', err);
-    statusText('Upscale में त्रुटि: ' + (err.message || err));
-    // try fallback once if upscaler failed
-    if (!upscalerInstance) {
-      try {
-        await fallbackCanvasUpscale(img, scale, quality);
-        const dataUrl2 = canvasEl.toDataURL('image/png');
-        downloadLink.href = dataUrl2;
-        downloadLink.classList.remove('hidden');
-        statusText('Fallback upscale पूरा हुआ।');
-      } catch (e2) {
-        statusText('Fallback भी असफल रहा।');
-      }
-    }
-  } finally {
-    showProgress(false);
-  }
+    
+    const reader = new FileReader();
+    reader.onload = (event) => {
+        originalImage = new Image();
+        originalImage.onload = () => {
+            beforeImage.src = event.target.result;
+            processBtn.disabled = false;
+        };
+        originalImage.src = event.target.result;
+    };
+    reader.readAsDataURL(file);
 }
 
-// Simple fallback upscale using canvas interpolation
-async function fallbackCanvasUpscale(img, scale = 2, quality = 'high') {
-  return new Promise((resolve, reject) => {
+// Process image with AI
+async function processImage() {
+    if (!originalImage) return;
+    
+    // Show loading state
+    uploadContainer.classList.add('hidden');
+    resultContainer.classList.add('hidden');
+    loadingContainer.classList.remove('hidden');
+    
+    const scale = parseInt(upscaleLevel.value);
+    const modelName = modelSelect.value;
+    
     try {
-      const targetW = Math.round(img.naturalWidth * scale);
-      const targetH = Math.round(img.naturalHeight * scale);
-      const canvas = document.createElement('canvas');
-      canvas.width = targetW;
-      canvas.height = targetH;
-      const ctx = canvas.getContext('2d');
-
-      // Set smoothing options
-      if (quality === 'pixel') {
-        ctx.imageSmoothingEnabled = false;
-      } else {
-        ctx.imageSmoothingEnabled = true;
-        if ('imageSmoothingQuality' in ctx) ctx.imageSmoothingQuality = quality === 'high' ? 'high' : 'medium';
-      }
-
-      ctx.drawImage(img, 0, 0, targetW, targetH);
-
-      // draw into visible canvas
-      canvasEl.width = targetW;
-      canvasEl.height = targetH;
-      const visibleCtx = canvasEl.getContext('2d');
-      visibleCtx.clearRect(0, 0, canvasEl.width, canvasEl.height);
-      visibleCtx.drawImage(canvas, 0, 0);
-
-      resolve();
-    } catch (err) {
-      reject(err);
+        progressText.textContent = 'Loading AI model...';
+        
+        // Load the selected model
+        currentModel = await loadModel(modelName);
+        
+        progressText.textContent = 'Processing image (this may take a few minutes)...';
+        
+        // Upscale the image
+        const startTime = performance.now();
+        upscaledImage = await upscaleImage(originalImage, scale, currentModel);
+        const endTime = performance.now();
+        
+        console.log(`Upscaling took ${((endTime - startTime)/1000).toFixed(2)} seconds`);
+        
+        // Display results
+        afterImage.src = upscaledImage;
+        loadingContainer.classList.add('hidden');
+        resultContainer.classList.remove('hidden');
+        
+        // Reinitialize slider for new images
+        setupComparisonSlider();
+    } catch (error) {
+        console.error('Error processing image:', error);
+        progressText.textContent = 'Error: ' + error.message;
+        setTimeout(() => {
+            loadingContainer.classList.add('hidden');
+            uploadContainer.classList.remove('hidden');
+        }, 3000);
     }
-  });
 }
 
-// UI helpers
-function showProgress(show) {
-  if (!progressEl) return;
-  if (show) progressEl.classList.remove('hidden');
-  else progressEl.classList.add('hidden');
+// Load AI model
+async function loadModel(modelName) {
+    // In a real implementation, this would load the WebAssembly model
+    // For this example, we'll simulate it
+    
+    // Simulate model loading delay
+    await new Promise(resolve => setTimeout(resolve, 1500));
+    
+    return {
+        name: modelName,
+        upscale: async (image, scale) => {
+            // In a real app, this would use the actual WASM model
+            return simulateUpscale(image, scale);
+        }
+    };
 }
 
-function statusText(txt) {
-  if (!statusEl) return;
-  statusEl.textContent = txt;
+// Simulate upscaling (replace with actual WASM model calls)
+function simulateUpscale(image, scale) {
+    return new Promise((resolve) => {
+        // Create a canvas to "process" the image
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
+        
+        // Set canvas dimensions
+        canvas.width = image.width * scale;
+        canvas.height = image.height * scale;
+        
+        // Draw original image (simulate processing)
+        ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
+        
+        // Add some "enhancement" effects to simulate AI
+        const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+        const data = imageData.data;
+        
+        // Simple "enhancement" - increase contrast slightly
+        for (let i = 0; i < data.length; i += 4) {
+            data[i] = data[i] < 128 ? data[i] * 0.9 : 255 - (255 - data[i]) * 0.9;
+            data[i+1] = data[i+1] < 128 ? data[i+1] * 0.9 : 255 - (255 - data[i+1]) * 0.9;
+            data[i+2] = data[i+2] < 128 ? data[i+2] * 0.9 : 255 - (255 - data[i+2]) * 0.9;
+        }
+        
+        ctx.putImageData(imageData, 0, 0);
+        
+        // Return as data URL
+        setTimeout(() => {
+            resolve(canvas.toDataURL('image/jpeg', 0.9));
+        }, 2000); // Simulate processing time
+    });
 }
 
-// Bind runUpscale to a button (if you have a button with id 'upBtn')
-const upBtn = document.getElementById('upBtn');
-if (upBtn) upBtn.addEventListener('click', runUpscale);
+// Setup before/after comparison slider
+function setupComparisonSlider() {
+    const slider = document.querySelector('.comparison-slider');
+    const button = document.querySelector('.slider-button');
+    const line = document.querySelector('.slider-line');
+    const container = document.querySelector('.comparison');
+    
+    let isDragging = false;
+    
+    function moveSlider(e) {
+        if (!isDragging) return;
+        
+        let x;
+        if (e.type === 'mousemove') {
+            x = e.clientX - container.getBoundingClientRect().left;
+        } else {
+            x = e.touches[0].clientX - container.getBoundingClientRect().left;
+        }
+        
+        // Limit x to container bounds
+        x = Math.max(0, Math.min(x, container.offsetWidth));
+        
+        const percent = (x / container.offsetWidth) * 100;
+        
+        // Update UI
+        beforeImage.style.width = `${percent}%`;
+        line.style.left = `${percent}%`;
+        button.style.left = `${percent}%`;
+    }
+    
+    function startDrag(e) {
+        e.preventDefault();
+        isDragging = true;
+        
+        // Change cursor
+        document.body.style.cursor = 'ew-resize';
+        button.style.cursor = 'grabbing';
+    }
+    
+    function endDrag() {
+        isDragging = false;
+        
+        // Reset cursor
+        document.body.style.cursor = '';
+        button.style.cursor = 'grab';
+    }
+    
+    // Mouse events
+    button.addEventListener('mousedown', startDrag);
+    document.addEventListener('mousemove', moveSlider);
+    document.addEventListener('mouseup', endDrag);
+    
+    // Touch events
+    button.addEventListener('touchstart', startDrag);
+    document.addEventListener('touchmove', moveSlider);
+    document.addEventListener('touchend', endDrag);
+}
 
-// Optional: expose runUpscale globally for manual call
-window.runUpscale = runUpscale;
+// Download upscaled image
+function downloadImage() {
+    if (!upscaledImage) return;
+    
+    const link = document.createElement('a');
+    link.href = upscaledImage;
+    link.download = `upscaled_${modelSelect.value}_${upscaleLevel.value}x.jpg`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+}
+
+// Reset the app to initial state
+function resetApp() {
+    originalImage = null;
+    upscaledImage = null;
+    fileInput.value = '';
+    processBtn.disabled = true;
+    resultContainer.classList.add('hidden');
+    uploadContainer.classList.remove('hidden');
+}
+
+// Register service worker for PWA
+function registerServiceWorker() {
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+            navigator.serviceWorker.register('/sw.js')
+                .then(registration => {
+                    console.log('ServiceWorker registration successful');
+                })
+                .catch(err => {
+                    console.log('ServiceWorker registration failed: ', err);
+                });
+        });
+    }
+}
+
+// Toggle dark/light theme
+function toggleTheme() {
+    document.documentElement.classList.toggle('dark');
+    localStorage.setItem('theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light');
+}
+
+// Check for saved theme preference
+if (localStorage.getItem('theme') === 'dark') {
+    document.documentElement.classList.add('dark');
+}
+
+// Initialize the app
+init();
