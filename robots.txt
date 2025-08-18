@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://patel463.github.io/Photo-upscale-tool/sitemap.xml
