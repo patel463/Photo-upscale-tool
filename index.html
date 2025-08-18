@@ -3,45 +3,63 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AI Photo Upscaler - Free Online Tool</title>
+  <title>Free AI Photo Upscaler Tool | HD Image Enhancer Online</title>
+  <meta name="description" content="Free AI-powered photo upscaler tool. Enhance and upscale images online with RealESRGAN and Waifu2x. Convert low-resolution photos into HD quality instantly.">
+
+  <!-- ✅ SEO Keywords -->
+  <meta name="keywords" content="AI Photo Upscaler, Free Image Upscaler, Online Photo Enhancer, HD Image Converter, Picture Quality Booster, AI Image Enlarger, Photo Sharpener, Upscale Image Online, Enhance Photo Resolution, Free Photo HD Tool, फोटो एन्हांसर, इमेज अपस्केलर, एआई फोटो टूल, ऑनलाइन फोटो सुधार, एचडी इमेज टूल, इमेज क्वालिटी बढ़ाओ, फ्री फोटो एन्हांस, पिक्चर एन्हांसर, ऑनलाइन फोटो एचडी, फोटो बड़ा करो">
+
+  <!-- ✅ OG Tags -->
+  <meta property="og:title" content="Free AI Photo Upscaler Tool | HD Image Enhancer">
+  <meta property="og:description" content="Enhance and upscale images online for free using AI. Supports RealESRGAN & Waifu2x.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://yourgithubpage.com/">
+  <meta property="og:image" content="thumbnail.jpg">
+
+  <!-- ✅ Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="AI Photo Upscaler Free Tool">
+  <meta name="twitter:description" content="Free AI-powered photo enhancer. Convert low-res to HD instantly.">
+  <meta name="twitter:image" content="thumbnail.jpg">
+
+  <!-- ✅ CSS -->
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <h1>AI Photo Upscaler</h1>
+  <header>
+    <h1>Free AI Photo Upscaler Tool</h1>
+    <p>Enhance & Convert Your Photos Into HD Instantly</p>
+  </header>
 
-  <!-- Upload Section -->
-  <div id="uploadContainer">
-    <input type="file" id="uploadInput" accept="image/*">
-    <br><br>
-    <label for="modelSelect">Choose Model:</label>
-    <select id="modelSelect">
-      <option value="realesrgan">Real-ESRGAN</option>
-      <option value="waifu2x">Waifu2x</option>
-    </select>
+  <main>
+    <section class="upload-section">
+      <label for="upload">Upload Your Photo:</label>
+      <input type="file" id="upload" accept="image/*">
+    </section>
 
-    <label for="upscaleLevel">Upscale:</label>
-    <select id="upscaleLevel">
-      <option value="2">2x</option>
-      <option value="4">4x</option>
-    </select>
-    <br><br>
-    <button onclick="processImage()">Upscale Image</button>
-  </div>
+    <section class="options">
+      <label for="model">Choose Model:</label>
+      <select id="model">
+        <option value="realesrgan">RealESRGAN</option>
+        <option value="waifu2x">Waifu2x</option>
+      </select>
+      <button id="process">Upscale Now</button>
+    </section>
 
-  <!-- Loading Section -->
-  <div id="loadingContainer" class="hidden">
-    <p id="progressText">Loading...</p>
-  </div>
+    <section class="output">
+      <h2>Result:</h2>
+      <canvas id="canvas"></canvas>
+      <a id="download" download="upscaled.png">Download HD Image</a>
+    </section>
+  </main>
 
-  <!-- Result Section -->
-  <div id="resultContainer" class="hidden">
-    <h2>Upscaled Result</h2>
-    <img id="afterImage" alt="Upscaled Image">
-  </div>
+  <footer>
+    <p>© 2025 Free AI Photo Upscaler | All Rights Reserved</p>
+  </footer>
 
-  <!-- External AI libraries -->
-  <script src="https://cdn.jsdelivr.net/npm/realesrgan-wasm@latest/realesrgan.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/waifu2x-wasm@latest/waifu2x.js"></script>
+  <!-- ✅ Free AI Models -->
+  <script src="https://cdn.jsdelivr.net/npm/realesrgan-wasm/dist/browser.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/waifu2x-wasm/dist/browser.js"></script>
   <script src="script.js"></script>
 </body>
 </html>
