@@ -1,61 +1,82 @@
-// DOM Elements and variables same as before
-// ... (keep all the same variable declarations) ...
+// DOM Elements
+const uploadContainer = document.getElementById('uploadContainer');
+const resultContainer = document.getElementById('resultContainer');
+const loadingContainer = document.getElementById('loadingContainer');
+const progressText = document.getElementById('progressText');
+const upscaleLevel = document.getElementById('upscaleLevel');
+const modelSelect = document.getElementById('modelSelect');
+const afterImage = document.getElementById('afterImage');
+const uploadInput = document.getElementById('uploadInput');
 
-// Updated processImage function for CDN models
+let originalImage = new Image();
+let upscaledImage;
+
+// File input handler
+uploadInput.addEventListener('change', (e) => {
+  const file = e.target.files[0];
+  if (file) {
+    const reader = new FileReader();
+    reader.onload = (ev) => {
+      originalImage.src = ev.target.result;
+    };
+    reader.readAsDataURL(file);
+  }
+});
+
+// Main processing function
 async function processImage() {
-    if (!originalImage) return;
-    
-    uploadContainer.classList.add('hidden');
-    resultContainer.classList.add('hidden');
-    loadingContainer.classList.remove('hidden');
-    
-    const scale = parseInt(upscaleLevel.value);
-    const modelName = modelSelect.value;
-    
-    try {
-        progressText.textContent = 'Loading AI model...';
-        
-        // Load model from CDN
-        let model;
-        if (modelName === 'realesrgan') {
-            model = await RealESRGAN.load();
-        } else {
-            model = await Waifu2x.load();
-        }
-        
-        progressText.textContent = 'Processing image...';
-        
-        // Create canvas for processing
-        const canvas = document.createElement('canvas');
-        canvas.width = originalImage.width * scale;
-        canvas.height = originalImage.height * scale;
-        const ctx = canvas.getContext('2d');
-        ctx.drawImage(originalImage, 0, 0, canvas.width, canvas.height);
-        
-        // Process with selected model
-        const startTime = performance.now();
-        if (modelName === 'realesrgan') {
-            upscaledImage = await model.enhance(canvas);
-        } else {
-            upscaledImage = await model.upscale(canvas);
-        }
-        const endTime = performance.now();
-        
-        console.log(`Upscaling took ${((endTime - startTime)/1000).toFixed(2)} seconds`);
-        
-        loadingContainer.classList.add('hidden');
-        resultContainer.classList.remove('hidden');
-        afterImage.src = upscaledImage;
-        setupComparisonSlider();
-    } catch (error) {
-        console.error('Error:', error);
-        progressText.textContent = 'Error: ' + error.message;
-        setTimeout(() => {
-            loadingContainer.classList.add('hidden');
-            uploadContainer.classList.remove('hidden');
-        }, 3000);
-    }
-}
+  if (!originalImage.src) {
+    alert("Please upload an image first!");
+    return;
+  }
 
-// Rest of the code remains the same as previous version
-// ... (keep all other functions unchanged) ...
+  uploadContainer.classList.add('hidden');
+  resultContainer.classList.add('hidden');
+  loadingContainer.classList.remove('hidden');
+
+  const scale = parseInt(upscaleLevel.value);
+  const modelName = modelSelect.value;
+
+  try {
+    progressText.textContent = 'Loading AI model...';
+
+    // Load model
+    let model;
+    if (modelName === 'realesrgan') {
+      model = await RealESRGAN.load();
+    } else {
+      model = await Waifu2x.load();
+    }
+
+    progressText.textContent = 'Processing image...';
+
+    // Create canvas
+    const canvas = document.createElement('canvas');
+    canvas.width = originalImage.width * scale;
+    canvas.height = originalImage.height * scale;
+    const ctx = canvas.getContext('2d');
+    ctx.drawImage(originalImage, 0, 0, canvas.width, canvas.height);
+
+    // Upscale
+    const startTime = performance.now();
+    if (modelName === 'realesrgan') {
+      upscaledImage = await model.enhance(canvas);
+    } else {
+      upscaledImage = await model.upscale(canvas);
+    }
+    const endTime = performance.now();
+
+    console.log(`Upscaling took ${((endTime - startTime) / 1000).toFixed(2)} seconds`);
+
+    loadingContainer.classList.add('hidden');
+    resultContainer.classList.remove('hidden');
+    afterImage.src = upscaledImage;
+  } catch (error) {
+    console.error('Error:', error);
+    progressText.textContent = 'Error: ' + error.message;
+    setTimeout(() => {
+      loadingContainer.classList.add('hidden');
+      uploadContainer.classList.remove('hidden');
+    }, 3000);
+  }
+}
