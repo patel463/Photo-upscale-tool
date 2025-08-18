@@ -1,65 +1,108 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Free AI Photo Upscaler Tool | HD Image Enhancer Online</title>
-  <meta name="description" content="Free AI-powered photo upscaler tool. Enhance and upscale images online with RealESRGAN and Waifu2x. Convert low-resolution photos into HD quality instantly.">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>AI Photo Upscaler — Free Online Image Enhancer (2x/4x/8x)</title>
 
-  <!-- ✅ SEO Keywords -->
-  <meta name="keywords" content="AI Photo Upscaler, Free Image Upscaler, Online Photo Enhancer, HD Image Converter, Picture Quality Booster, AI Image Enlarger, Photo Sharpener, Upscale Image Online, Enhance Photo Resolution, Free Photo HD Tool, फोटो एन्हांसर, इमेज अपस्केलर, एआई फोटो टूल, ऑनलाइन फोटो सुधार, एचडी इमेज टूल, इमेज क्वालिटी बढ़ाओ, फ्री फोटो एन्हांस, पिक्चर एन्हांसर, ऑनलाइन फोटो एचडी, फोटो बड़ा करो">
+  <!-- Primary SEO -->
+  <meta name="description" content="Free AI Photo Upscaler: upscale & enhance low-resolution images to HD using Real-ESRGAN / Waifu2x. Fast upload, 2x-8x upscaling, and one-click download." />
+  <meta name="author" content="AI Photo Upscaler" />
+  <link rel="canonical" href="https://patel463.github.io/Photo-upscale-tool/" />
 
-  <!-- ✅ OG Tags -->
-  <meta property="og:title" content="Free AI Photo Upscaler Tool | HD Image Enhancer">
-  <meta property="og:description" content="Enhance and upscale images online for free using AI. Supports RealESRGAN & Waifu2x.">
-  <meta property="og:type" content="website">
-  <meta property="og:url" content="https://yourgithubpage.com/">
-  <meta property="og:image" content="thumbnail.jpg">
+  <!-- 20 English + 20 Hindi keywords -->
+  <meta name="keywords" content="AI photo upscaler, free image upscaler, online photo enhancer, HD image enhancer, RealESRGAN, Waifu2x, image super resolution, upscale image online, sharpen photo, denoise image, photo enlarger, enhance picture quality, HD photo maker, AI image enhancer, image scaling tool, super resolution online, image to HD, increase image resolution, photo quality booster, AI upscaling tool, फोटो अपस्केलर, एआई इमेज एन्हांसर, फ्री फोटो टूल, एचडी फोटो बनाएं, इमेज क्वालिटी बढ़ाएं, ऑनलाइन फोटो एचडी, फोटो बड़ा करो, फोटो शार्प करो, इमेज क्लियर करो, सुपर रेजोल्यूशन, इमेज अपस्केल ऑनलाइन, बिना वॉटरमार्क फोटो, फ्री एआई टूल, फोटो क्वालिटी सुधार, 2x 4x 8x फोटो, नॉइज़ रिडक्शन" />
 
-  <!-- ✅ Twitter Card -->
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="AI Photo Upscaler Free Tool">
-  <meta name="twitter:description" content="Free AI-powered photo enhancer. Convert low-res to HD instantly.">
-  <meta name="twitter:image" content="thumbnail.jpg">
+  <!-- Open Graph -->
+  <meta property="og:title" content="AI Photo Upscaler — Free Online Image Enhancer" />
+  <meta property="og:description" content="Upscale images to HD using free AI models (Real-ESRGAN/Waifu2x). No signup, just upload and download." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://patel463.github.io/Photo-upscale-tool/" />
+  <meta property="og:image" content="preview.jpg" />
 
-  <!-- ✅ CSS -->
-  <link rel="stylesheet" href="style.css">
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="AI Photo Upscaler — Free Online Tool" />
+  <meta name="twitter:description" content="Free AI image upscaling (2x/4x/8x). Upload → Enhance → Download." />
+  <meta name="twitter:image" content="preview.jpg" />
+
+  <!-- Schema.org -->
+  <script type="application/ld+json">
+  {
+    "@context":"https://schema.org",
+    "@type":"WebApplication",
+    "name":"AI Photo Upscaler",
+    "applicationCategory":"ImageEditing",
+    "operatingSystem":"All",
+    "url":"https://patel463.github.io/Photo-upscale-tool/",
+    "offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},
+    "description":"Free AI-powered photo upscaler using Real-ESRGAN / Waifu2x."
+  }
+  </script>
+
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='0.9em' font-size='90'%3E🖼️%3C/text%3E%3C/svg%3E">
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <header>
-    <h1>Free AI Photo Upscaler Tool</h1>
-    <p>Enhance & Convert Your Photos Into HD Instantly</p>
+  <header class="hero">
+    <h1>Free <span>AI Photo Upscaler</span></h1>
+    <p>Enhance & convert your photos into HD — 2x • 4x • 8x</p>
   </header>
 
-  <main>
-    <section class="upload-section">
-      <label for="upload">Upload Your Photo:</label>
-      <input type="file" id="upload" accept="image/*">
+  <main class="container">
+    <section class="panel">
+      <div class="field">
+        <label for="fileInput">Upload Image (JPG/PNG)</label>
+        <input id="fileInput" type="file" accept="image/*" />
+      </div>
+
+      <div class="grid">
+        <div class="field">
+          <label for="modelSelect">AI Model</label>
+          <select id="modelSelect">
+            <option value="realesrgan">Real-ESRGAN (photo)</option>
+            <option value="waifu2x">Waifu2x (anime/art)</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="scaleSelect">Upscale</label>
+          <select id="scaleSelect">
+            <option value="2">2x</option>
+            <option value="4" selected>4x</option>
+            <option value="8">8x</option>
+          </select>
+        </div>
+      </div>
+
+      <button id="upscaleBtn">Upscale Now</button>
+      <p id="status" class="muted">Ready.</p>
     </section>
 
-    <section class="options">
-      <label for="model">Choose Model:</label>
-      <select id="model">
-        <option value="realesrgan">RealESRGAN</option>
-        <option value="waifu2x">Waifu2x</option>
-      </select>
-      <button id="process">Upscale Now</button>
+    <section class="result panel">
+      <h2>Result</h2>
+      <div class="result-wrap">
+        <img id="preview" alt="Preview" />
+      </div>
+      <a id="downloadLink" class="download" download="upscaled.png">Download HD Image</a>
+      <p id="note" class="muted"></p>
     </section>
 
-    <section class="output">
-      <h2>Result:</h2>
-      <canvas id="canvas"></canvas>
-      <a id="download" download="upscaled.png">Download HD Image</a>
+    <section class="panel ads">
+      <!-- Ad space -->
+      <div class="ads-box">Ad Space 728×90</div>
     </section>
   </main>
 
-  <footer>
-    <p>© 2025 Free AI Photo Upscaler | All Rights Reserved</p>
+  <footer class="footer">
+    <p>#AI #PhotoUpscaler #ImageEnhancer #HDPhoto #Upscale #RealESRGAN #Waifu2x #फोटो_बड़ा_करो #इमेज_HD</p>
+    <p>© 2025 AI Photo Upscaler • Free & Open Source</p>
   </footer>
 
-  <!-- ✅ Free AI Models -->
-  <script src="https://cdn.jsdelivr.net/npm/realesrgan-wasm/dist/browser.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/waifu2x-wasm/dist/browser.js"></script>
+  <!-- Attempt to load browser builds of AI libs (will fail gracefully if unavailable) -->
+  <script src="https://cdn.jsdelivr.net/npm/realesrgan-wasm/dist/browser.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/waifu2x-wasm/dist/browser.js" defer></script>
+
   <script src="script.js"></script>
 </body>
 </html>
