@@ -1,46 +1,27 @@
-body {
-  font-family: Arial, sans-serif;
-  text-align: center;
-  background: #f5f5f5;
-  margin: 0;
-  padding: 0;
+:root {
+  --bg:#f6f7fb; --card:#ffffff; --text:#1b1f23; --muted:#6a7280;
+  --brand:#2563eb; --brand-2:#1d4ed8; --ring:#93c5fd; --success:#16a34a;
 }
-
-header {
-  background: #0073e6;
-  color: white;
-  padding: 20px;
-}
-
-main {
-  margin: 20px;
-}
-
-.upload-section, .options, .output {
-  margin: 20px 0;
-}
-
-button {
-  padding: 10px 20px;
-  margin-top: 10px;
-  cursor: pointer;
-  background: #0073e6;
-  color: white;
-  border: none;
-  border-radius: 5px;
-}
-
-canvas {
-  border: 1px solid #ccc;
-  max-width: 100%;
-}
-
-a#download {
-  display: block;
-  margin-top: 10px;
-  background: #28a745;
-  color: white;
-  padding: 10px;
-  text-decoration: none;
-  border-radius: 5px;
-}
+*{box-sizing:border-box}
+body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,"Helvetica Neue",Arial,sans-serif;background:var(--bg);color:var(--text)}
+.hero{padding:28px 16px;text-align:center;background:linear-gradient(180deg,#0f172a,#0b1024);color:#fff}
+.hero h1{font-size:28px;margin:0 0 6px}
+.hero h1 span{color:#93c5fd}
+.hero p{margin:0;color:#c7d2fe}
+.container{max-width:980px;margin:20px auto;padding:0 12px}
+.panel{background:var(--card);border-radius:16px;padding:16px 16px 18px;box-shadow:0 4px 24px rgba(2,6,23,.06);margin-bottom:16px}
+.field{display:flex;flex-direction:column;gap:6px;margin:10px 0}
+.field label{font-weight:600}
+input[type=file],select{padding:10px;border-radius:10px;border:1px solid #d1d5db;outline:none}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+#upscaleBtn{background:var(--brand);color:#fff;border:0;padding:12px 18px;border-radius:12px;font-weight:700;cursor:pointer}
+#upscaleBtn:hover{background:var(--brand-2)}
+.muted{color:var(--muted);font-size:14px}
+.result h2{margin-top:4px}
+.result-wrap{display:flex;justify-content:center;align-items:center;min-height:220px;border:1px dashed #d1d5db;border-radius:14px;background:#fbfbfd;overflow:hidden}
+#preview{max-width:100%;height:auto;display:block}
+.download{display:inline-block;margin-top:12px;background:var(--success);color:#fff;text-decoration:none;padding:10px 16px;border-radius:12px}
+.ads{display:flex;justify-content:center;align-items:center}
+.ads-box{width:min(728px,95%);height:90px;border-radius:12px;background:#e5e7eb;display:flex;justify-content:center;align-items:center;color:#4b5563}
+.footer{padding:22px 12px;text-align:center;color:#94a3b8}
+@media (max-width:640px){.grid{grid-template-columns:1fr}}
